@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 )
 
+// FileInfo contains tar metadata for a specific FileNode.
 type FileInfo struct {
 	Name     string
 	TypeFlag byte
