@@ -14,7 +14,7 @@ type RunDockerCmdStds struct {
 	Stdin  io.Reader
 }
 
-var defaultRunDockerCmdStds = RunDockerCmdStds{
+var DefaultRunDockerCmdStds = RunDockerCmdStds{
 	Stdout: os.Stdout,
 	Stderr: os.Stderr,
 	Stdin:  os.Stdin,
@@ -32,12 +32,11 @@ func RunDockerCmd(cmdStr string, args []string, stds *RunDockerCmdStds) error {
 	cmd := exec.Command("docker", allArgs...)
 	cmd.Env = os.Environ()
 
-	if stds == nil {
-		stds = &defaultRunDockerCmdStds
+	if stds != nil {
+		cmd.Stdout = stds.Stdout
+		cmd.Stderr = stds.Stderr
+		cmd.Stdin = stds.Stdin
 	}
-	cmd.Stdout = stds.Stdout
-	cmd.Stderr = stds.Stderr
-	cmd.Stdin = stds.Stdin
 
 	return cmd.Run()
 }
