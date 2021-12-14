@@ -13,6 +13,7 @@ func TestNewFileInfoFromTarHeader(t *testing.T) {
 	expected := []*FileInfo{
 		{
 			Name:     "directory",
+			Path:     "directory",
 			TypeFlag: 53,
 			Linkname: "",
 			Data:     []byte{},
@@ -24,6 +25,7 @@ func TestNewFileInfoFromTarHeader(t *testing.T) {
 		},
 		{
 			Name:     "file.txt",
+			Path:     "directory/file.txt",
 			TypeFlag: 48,
 			Linkname: "",
 			Data:     []byte("aaa\nbb\nc\n"),
