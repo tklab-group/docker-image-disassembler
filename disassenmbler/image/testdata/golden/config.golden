@@ -1,0 +1,76 @@
+{
+  "architecture": "amd64",
+  "config": {
+    "Hostname": "",
+    "Domainname": "",
+    "User": "",
+    "AttachStdin": false,
+    "AttachStdout": false,
+    "AttachStderr": false,
+    "Tty": false,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Env": [
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    ],
+    "Cmd": [
+      "/bin/sh"
+    ],
+    "Image": "",
+    "Volumes": null,
+    "WorkingDir": "",
+    "Entrypoint": null,
+    "OnBuild": null,
+    "Labels": null
+  },
+  "container_config": {
+    "Hostname": "",
+    "Domainname": "",
+    "User": "",
+    "AttachStdin": false,
+    "AttachStdout": false,
+    "AttachStderr": false,
+    "Tty": false,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Env": null,
+    "Cmd": null,
+    "Image": "",
+    "Volumes": null,
+    "WorkingDir": "",
+    "Entrypoint": null,
+    "OnBuild": null,
+    "Labels": null
+  },
+  "created": "2021-12-15T09:21:27.420704427Z",
+  "history": [
+    {
+      "created": "2021-11-24T20:19:40.199700946Z",
+      "created_by": "/bin/sh -c #(nop) ADD file:9233f6f2237d79659a9521f7e390df217cec49f1a8aa3a12147bbca1956acdb9 in / "
+    },
+    {
+      "created": "2021-11-24T20:19:40.483367546Z",
+      "created_by": "/bin/sh -c #(nop)  CMD [\"/bin/sh\"]",
+      "empty_layer": true
+    },
+    {
+      "created": "2021-12-15T09:21:27.218956487Z",
+      "created_by": "RUN /bin/sh -c mkdir -p /a/bb/ccc/dddd # buildkit",
+      "comment": "buildkit.dockerfile.v0"
+    },
+    {
+      "created": "2021-12-15T09:21:27.420704427Z",
+      "created_by": "RUN /bin/sh -c echo eeeee \u003e /a/bb/ccc/dddd/eeeee # buildkit",
+      "comment": "buildkit.dockerfile.v0"
+    }
+  ],
+  "os": "linux",
+  "rootfs": {
+    "type": "layers",
+    "diff_ids": [
+      "sha256:8d3ac3489996423f53d6087c81180006263b79f206d3fdec9e66f0e27ceb8759",
+      "sha256:c5a9f43a1630064d8cba3bdffd5d00f100498c2e7acc09a8156a1f0962574252",
+      "sha256:281e87582f52bcd6c71653489f0642ad2273b632ab774332bc667f719434acd5"
+    ]
+  }
+}
