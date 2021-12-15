@@ -3,6 +3,7 @@ package filetree
 import (
 	"fmt"
 	dockerarchive "github.com/docker/docker/pkg/archive"
+	"path"
 	"strings"
 )
 
@@ -57,4 +58,20 @@ func (tree *FileTree) AddNode(info *FileInfo) error {
 	}
 
 	return nil
+}
+
+// FindNodeFromPath returns FileNode specified by the path.
+// If not exist, it returns nil.
+func (tree *FileTree) FindNodeFromPath(pathStr string) *FileNode {
+	nodeNames := strings.Split(strings.Trim(path.Clean(pathStr), "/"), "/")
+	node := tree.Root
+	for _, name := range nodeNames {
+		n, exist := node.Children[name]
+		if !exist {
+			return nil
+		}
+		node = n
+	}
+
+	return node
 }
