@@ -1,0 +1,11 @@
+{
+  "Config": "557db50c9ef1cd918b1ff78880c65f2ff6a450c646e324691a6fe7bc2aa3debc.json",
+  "RepoTags": [
+    "add-file:latest"
+  ],
+  "Layers": [
+    "1e33021cb9e4fc8e989445d68584dd2386b15e902fc4e95fba64a5a917759466/layer.tar",
+    "4a0c493ec850512a4f72774b55b08d61fe6a0ab80cda2165cab36f1e20b1429c/layer.tar",
+    "9027e3575c9e8b582f792d5cd342c3cb0144a170413c98fd092432f782a6d952/layer.tar"
+  ]
+}
