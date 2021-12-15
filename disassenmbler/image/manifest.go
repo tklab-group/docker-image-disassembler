@@ -9,11 +9,11 @@ type Manifest struct {
 	LayerTarPaths []string `json:"Layers"`
 }
 
-func newManifest(manifestBytes []byte) (Manifest, error) {
+func newManifest(manifestBytes []byte) (*Manifest, error) {
 	var manifest []Manifest
 	err := json.Unmarshal(manifestBytes, &manifest)
 	if err != nil {
-		return Manifest{}, err
+		return nil, err
 	}
-	return manifest[0], nil
+	return &manifest[0], nil
 }

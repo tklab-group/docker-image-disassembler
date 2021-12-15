@@ -7,7 +7,24 @@ import (
 )
 
 type FileTree struct {
-	Root *FileNode
+	Root      *FileNode
+	LayerName string
+}
+
+// NewFileTree creates an empty FileTree.
+func NewFileTree() *FileTree {
+	tree := &FileTree{}
+
+	// Root is a dummy node.
+	root := &FileNode{
+		Tree:     tree,
+		Parent:   nil,
+		Name:     "",
+		Info:     nil,
+		Children: map[string]*FileNode{},
+	}
+	tree.Root = root
+	return tree
 }
 
 // AddNode adds new node to the tree.
