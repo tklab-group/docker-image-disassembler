@@ -1,0 +1,7 @@
+FROM ubuntu:hirsute-20211107
+
+RUN apt-get update \
+    && apt-get install -y --allow-downgrades \
+     tzdata=2021a-1ubuntu1
+
+# Latest version for tzdata is 2021e-0ubuntu0.21.04 (2021/12/16)
