@@ -1,13 +1,12 @@
 package docker
 
 import (
-	"io/ioutil"
 	"os"
 )
 
 // BuildImageFromCli returns the id for the built image.
 func BuildImageFromCli(buildArgs []string) (string, error) {
-	iidfile, err := ioutil.TempFile("/tmp", "iid")
+	iidfile, err := os.CreateTemp("/tmp", "iid")
 	if err != nil {
 		return "", err
 	}
@@ -19,7 +18,7 @@ func BuildImageFromCli(buildArgs []string) (string, error) {
 		return "", err
 	}
 
-	imageId, err := ioutil.ReadFile(iidfile.Name())
+	imageId, err := os.ReadFile(iidfile.Name())
 	if err != nil {
 		return "", err
 	}

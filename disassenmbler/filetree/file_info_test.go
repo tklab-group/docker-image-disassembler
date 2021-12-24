@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"github.com/stretchr/testify/assert"
 	"io"
-	"io/ioutil"
+	"os"
 	"testing"
 )
 
@@ -37,7 +37,7 @@ func TestNewFileInfoFromTarHeader(t *testing.T) {
 		},
 	}
 
-	b, err := ioutil.ReadFile("testdata/new-file-info-from-tar-header.tar")
+	b, err := os.ReadFile("testdata/new-file-info-from-tar-header.tar")
 	buf := bytes.NewBuffer(b)
 	assert.NoError(t, err)
 

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/tklab-group/docker-image-disassembler/disassenmbler/filetree"
 	"io"
-	"io/ioutil"
 	"path"
 	"strings"
 )
@@ -64,7 +63,7 @@ func NewImageArchive(tarFile io.Reader) (*ImageArchive, error) {
 
 				img.LayerMap[tree.LayerName] = tree
 			} else if strings.HasSuffix(name, ".json") || strings.HasPrefix(name, "sha256:") {
-				fileBuffer, err := ioutil.ReadAll(tarReader)
+				fileBuffer, err := io.ReadAll(tarReader)
 				if err != nil {
 					return nil, err
 				}

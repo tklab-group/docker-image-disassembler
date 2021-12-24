@@ -4,12 +4,12 @@ import (
 	"bytes"
 	"github.com/sebdah/goldie/v2"
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
+	"os"
 	"testing"
 )
 
 func TestNewImageArchive(t *testing.T) {
-	tarFile, err := ioutil.ReadFile("testdata/dockerimage-add-file.tar")
+	tarFile, err := os.ReadFile("testdata/dockerimage-add-file.tar")
 	assert.NoError(t, err)
 	buf := bytes.NewBuffer(tarFile)
 
