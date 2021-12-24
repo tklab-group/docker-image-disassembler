@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tklab-group/docker-image-disassembler/disassenmbler/image"
 	"github.com/tklab-group/docker-image-disassembler/disassenmbler/image/docker"
+	"github.com/tklab-group/docker-image-disassembler/disassenmbler/testutil"
 	"html/template"
 	"os"
 	"strings"
@@ -20,9 +21,7 @@ func TestReadAptPkgInfos(t *testing.T) {
 		{Package: "apt", Version: "2.2.4ubuntu0.1"},
 	}
 
-	b, err := os.ReadFile("testdata/apt_pkg")
-	assert.NoError(t, err)
-	buf := bytes.NewBuffer(b)
+	buf := testutil.ReadFileForBuffer(t, "testdata/apt_pkg")
 
 	got, err := ReadAptPkgInfos(buf)
 	assert.NoError(t, err)
@@ -42,9 +41,7 @@ func TestAptDockerfileReproduction(t *testing.T) {
 	err = docker.RunDockerCmd("save", []string{baseIid, "-o", baseImageTar.Name()}, nil)
 	require.NoError(t, err)
 
-	b, err := os.ReadFile(baseImageTar.Name())
-	require.NoError(t, err)
-	buf := bytes.NewBuffer(b)
+	buf := testutil.ReadFileForBuffer(t, baseImageTar.Name())
 	imageArchive, err := image.NewImageArchive(buf)
 	require.NoError(t, err)
 

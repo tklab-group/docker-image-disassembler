@@ -1,17 +1,14 @@
 package image
 
 import (
-	"bytes"
 	"github.com/sebdah/goldie/v2"
 	"github.com/stretchr/testify/assert"
-	"os"
+	"github.com/tklab-group/docker-image-disassembler/disassenmbler/testutil"
 	"testing"
 )
 
 func TestNewImageArchive(t *testing.T) {
-	tarFile, err := os.ReadFile("testdata/dockerimage-add-file.tar")
-	assert.NoError(t, err)
-	buf := bytes.NewBuffer(tarFile)
+	buf := testutil.ReadFileForBuffer(t, "testdata/dockerimage-add-file.tar")
 
 	imageArchive, err := NewImageArchive(buf)
 	assert.NoError(t, err)

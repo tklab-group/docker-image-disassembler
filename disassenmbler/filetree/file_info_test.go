@@ -2,10 +2,9 @@ package filetree
 
 import (
 	"archive/tar"
-	"bytes"
 	"github.com/stretchr/testify/assert"
+	"github.com/tklab-group/docker-image-disassembler/disassenmbler/testutil"
 	"io"
-	"os"
 	"testing"
 )
 
@@ -37,10 +36,7 @@ func TestNewFileInfoFromTarHeader(t *testing.T) {
 		},
 	}
 
-	b, err := os.ReadFile("testdata/new-file-info-from-tar-header.tar")
-	buf := bytes.NewBuffer(b)
-	assert.NoError(t, err)
-
+	buf := testutil.ReadFileForBuffer(t, "testdata/new-file-info-from-tar-header.tar")
 	tarReader := tar.NewReader(buf)
 	var index int
 	for {
