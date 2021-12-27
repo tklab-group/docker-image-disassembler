@@ -4,6 +4,9 @@ go 1.17
 
 require (
 	github.com/docker/docker v20.10.12+incompatible
+	github.com/kr/pretty v0.3.0
+	github.com/moby/buildkit v0.9.3
+	github.com/sebdah/goldie/v2 v2.5.3
 	github.com/stretchr/testify v1.7.0
 )
 
@@ -13,6 +16,7 @@ require (
 	github.com/containerd/cgroups v1.0.1 // indirect
 	github.com/containerd/containerd v1.5.8 // indirect
 	github.com/containerd/continuity v0.2.1 // indirect
+	github.com/containerd/typeurl v1.0.2 // indirect
 	github.com/coreos/go-systemd/v22 v22.3.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/docker/distribution v2.7.1+incompatible // indirect
@@ -21,7 +25,8 @@ require (
 	github.com/godbus/dbus/v5 v5.0.4 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
-	github.com/golang/protobuf v1.5.0 // indirect
+	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/kr/text v0.2.0 // indirect
 	github.com/moby/locker v1.0.1 // indirect
 	github.com/moby/sys/mount v0.3.0 // indirect
 	github.com/moby/sys/mountinfo v0.5.0 // indirect
@@ -33,7 +38,7 @@ require (
 	github.com/opencontainers/selinux v1.10.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/sebdah/goldie/v2 v2.5.3 // indirect
+	github.com/rogpeppe/go-internal v1.6.1 // indirect
 	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/syndtr/gocapability v0.0.0-20200815063812-42c35b437635 // indirect
