@@ -98,6 +98,21 @@ func NewImageArchive(tarFile io.Reader) (*ImageArchive, error) {
 	return img, nil
 }
 
+// GetLatestFileNode searches FileNode based on the path and returns the latest one.
+// If the path doesn't exist in all layers, it returns nil.
+func (img *ImageArchive) GetLatestFileNode(path string) *filetree.FileNode {
+	for i := len(img.Manifest.LayerTarPaths) - 1; i >= 0; i-- {
+		lastLayerName := img.Manifest.LayerTarPaths[i]
+		lastLayerFileTree := img.LayerMap[lastLayerName]
+		fileNode := lastLayerFileTree.FindNodeFromPath(path)
+		if fileNode != nil {
+			return fileNode
+		}
+	}
+
+	return nil
+}
+
 func processLayerTar(name string, tarReader *tar.Reader) (*filetree.FileTree, error) {
 	tree := filetree.NewFileTree()
 	tree.LayerName = name
