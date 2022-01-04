@@ -59,7 +59,7 @@ func TestNoteLackOfPackageVersion_Apt(t *testing.T) {
 	}
 
 	// Extract apt packages information from docker image.
-	imageTarName := testutil.CreateTarImageFromDockerfile(t, "testdata/Dockerfile")
+	imageTarName, _ := testutil.CreateTarImageFromDockerfile(t, "testdata/Dockerfile")
 	imagTarBuf := testutil.ReadFileForBuffer(t, imageTarName)
 	imageArchive, err := image.NewImageArchive(imagTarBuf)
 	require.NoError(t, err)

@@ -11,7 +11,6 @@ import (
 	"github.com/tklab-group/docker-image-disassembler/disassenmbler/image/docker"
 	"github.com/tklab-group/docker-image-disassembler/disassenmbler/testutil"
 	"html/template"
-	"os"
 	"strings"
 	"testing"
 )
@@ -32,17 +31,8 @@ func TestReadAptPkgInfos(t *testing.T) {
 // TestAptDockerfileReproduction tests the reproduction of Dockerfile containing the same apt packages.
 // TODO: Rename and move.
 func TestAptDockerfileReproduction(t *testing.T) {
-	baseIid, err := docker.BuildImageFromCli([]string{"-f", " testdata/Dockerfile.apt", "."})
-	require.NoError(t, err)
-
-	tmpDir := t.TempDir()
-	baseImageTar, err := os.CreateTemp(tmpDir, "dockerimage-*.tar")
-	require.NoError(t, err)
-
-	err = docker.RunDockerCmd("save", []string{baseIid, "-o", baseImageTar.Name()}, nil)
-	require.NoError(t, err)
-
-	buf := testutil.ReadFileForBuffer(t, baseImageTar.Name())
+	baseImageTarName, baseIid := testutil.CreateTarImageFromDockerfile(t, "testdata/Dockerfile.apt")
+	buf := testutil.ReadFileForBuffer(t, baseImageTarName)
 	imageArchive, err := image.NewImageArchive(buf)
 	require.NoError(t, err)
 
