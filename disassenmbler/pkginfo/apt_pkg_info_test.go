@@ -6,7 +6,6 @@ import (
 	"github.com/sebdah/goldie/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tklab-group/docker-image-disassembler/disassenmbler/filetree"
 	"github.com/tklab-group/docker-image-disassembler/disassenmbler/image"
 	"github.com/tklab-group/docker-image-disassembler/disassenmbler/image/docker"
 	"github.com/tklab-group/docker-image-disassembler/disassenmbler/testutil"
@@ -36,15 +35,7 @@ func TestAptDockerfileReproduction(t *testing.T) {
 	imageArchive, err := image.NewImageArchive(buf)
 	require.NoError(t, err)
 
-	var aptPkgFile *filetree.FileNode
-	for i := len(imageArchive.Manifest.LayerTarPaths) - 1; i >= 0; i-- {
-		lastLayerName := imageArchive.Manifest.LayerTarPaths[i]
-		lastLayerFileTree := imageArchive.LayerMap[lastLayerName]
-		aptPkgFile = lastLayerFileTree.FindNodeFromPath(AptPkgFilePath)
-		if aptPkgFile != nil {
-			break
-		}
-	}
+	aptPkgFile := imageArchive.GetLatestFileNode(AptPkgFilePath)
 	require.NotNil(t, aptPkgFile)
 
 	buf = bytes.NewBuffer(aptPkgFile.Info.Data)
