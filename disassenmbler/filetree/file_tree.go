@@ -8,13 +8,16 @@ import (
 )
 
 type FileTree struct {
-	Root      *FileNode
-	LayerName string
+	Root          *FileNode
+	LayerName     string
+	WhiteoutFiles []*WhiteoutFile
 }
 
 // NewFileTree creates an empty FileTree.
 func NewFileTree() *FileTree {
-	tree := &FileTree{}
+	tree := &FileTree{
+		WhiteoutFiles: make([]*WhiteoutFile, 0),
+	}
 
 	// Root is a dummy node.
 	root := &FileNode{
@@ -41,6 +44,12 @@ func (tree *FileTree) AddNode(info *FileInfo) error {
 		} else {
 			// Not to add node under the whiteout node.
 			if strings.HasPrefix(name, dockerarchive.WhiteoutPrefix) {
+				whiteoutFile := NewWhiteoutFile(name, info)
+				if whiteoutFile == nil {
+					return fmt.Errorf("could not add whiteout file: '%s' (path: '%s')", name, info.Path)
+				}
+
+				tree.WhiteoutFiles = append(tree.WhiteoutFiles, whiteoutFile)
 				return nil
 			}
 
