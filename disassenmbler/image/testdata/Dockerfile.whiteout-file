@@ -1,0 +1,6 @@
+FROM alpine:3.15.0
+
+RUN mkdir -p /a/bb/ccc/dddd
+RUN echo eeeee > /a/bb/ccc/dddd/eeeee
+RUN rm /a/bb/ccc/dddd/eeeee
+RUN rm -rf /a/bb/ccc
