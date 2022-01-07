@@ -22,8 +22,8 @@ func TestNewImageArchive(t *testing.T) {
 	g.AssertJson(t, "config", imageArchive.Config)
 
 	layerCounts := len(imageArchive.Manifest.LayerTarPaths)
-	lastLayer, ok := imageArchive.LayerMap[imageArchive.Manifest.LayerTarPaths[layerCounts-1]]
-	assert.True(t, ok)
+	lastLayer, err := imageArchive.GetFileTreeByLayerIndex(layerCounts - 1)
+	assert.NoError(t, err)
 	node := lastLayer.FindNodeFromPath("/a/bb/ccc/dddd/eeeee")
 	assert.NotNil(t, node)
 

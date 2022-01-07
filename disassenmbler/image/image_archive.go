@@ -98,13 +98,24 @@ func NewImageArchive(tarFile io.Reader) (*ImageArchive, error) {
 	return img, nil
 }
 
+// GetFileTreeByLayerIndex returns FileTree for the layer specified by index.
+func (img *ImageArchive) GetFileTreeByLayerIndex(index int) (*filetree.FileTree, error) {
+	if index < 0 || index >= len(img.Manifest.LayerTarPaths) {
+		return nil, fmt.Errorf("index %d is out of range", index)
+	}
+
+	layerName := img.Manifest.LayerTarPaths[index]
+	fileTree := img.LayerMap[layerName]
+
+	return fileTree, nil
+}
+
 // GetLatestFileNode searches FileNode based on the path and returns the latest one.
 // If the path doesn't exist in all layers, it returns nil.
 func (img *ImageArchive) GetLatestFileNode(path string) *filetree.FileNode {
 	for i := len(img.Manifest.LayerTarPaths) - 1; i >= 0; i-- {
-		lastLayerName := img.Manifest.LayerTarPaths[i]
-		lastLayerFileTree := img.LayerMap[lastLayerName]
-		fileNode := lastLayerFileTree.FindNodeFromPath(path)
+		fileTree, _ := img.GetFileTreeByLayerIndex(i)
+		fileNode := fileTree.FindNodeFromPath(path)
 		if fileNode != nil {
 			return fileNode
 		}
