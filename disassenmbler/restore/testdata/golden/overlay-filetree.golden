@@ -1,0 +1,88 @@
+&filetree.FileTree{
+    Root: &filetree.FileNode{
+        Tree:     &filetree.FileTree{(CYCLIC REFERENCE)},
+        Parent:   (*filetree.FileNode)(nil),
+        Name:     "",
+        Info:     (*filetree.FileInfo)(nil),
+        Children: {
+            "a": &filetree.FileNode{
+                Tree:   &filetree.FileTree{(CYCLIC REFERENCE)},
+                Parent: &filetree.FileNode{(CYCLIC REFERENCE)},
+                Name:   "a",
+                Info:   &filetree.FileInfo{
+                    Name:     "a",
+                    Path:     "a",
+                    TypeFlag: 0x0,
+                    Linkname: "",
+                    Data:     nil,
+                    Size:     0,
+                    Mode:     0x1ff,
+                    Uid:      0,
+                    Gid:      0,
+                    IsDir:    true,
+                },
+                Children: {
+                    "aa": &filetree.FileNode{
+                        Tree:   &filetree.FileTree{(CYCLIC REFERENCE)},
+                        Parent: &filetree.FileNode{(CYCLIC REFERENCE)},
+                        Name:   "aa",
+                        Info:   &filetree.FileInfo{
+                            Name:     "aa",
+                            Path:     "a/aa",
+                            TypeFlag: 0x0,
+                            Linkname: "",
+                            Data:     {0x6d, 0x6f, 0x64, 0x69, 0x66, 0x69, 0x65, 0x64},
+                            Size:     0,
+                            Mode:     0x0,
+                            Uid:      0,
+                            Gid:      0,
+                            IsDir:    false,
+                        },
+                        Children: {
+                        },
+                    },
+                    "aa2": &filetree.FileNode{
+                        Tree:   &filetree.FileTree{(CYCLIC REFERENCE)},
+                        Parent: &filetree.FileNode{(CYCLIC REFERENCE)},
+                        Name:   "aa2",
+                        Info:   &filetree.FileInfo{
+                            Name:     "aa2",
+                            Path:     "a/aa2",
+                            TypeFlag: 0x0,
+                            Linkname: "",
+                            Data:     {0x61, 0x64, 0x64, 0x65, 0x64},
+                            Size:     0,
+                            Mode:     0x0,
+                            Uid:      0,
+                            Gid:      0,
+                            IsDir:    false,
+                        },
+                        Children: {
+                        },
+                    },
+                },
+            },
+            "b": &filetree.FileNode{
+                Tree:   &filetree.FileTree{(CYCLIC REFERENCE)},
+                Parent: &filetree.FileNode{(CYCLIC REFERENCE)},
+                Name:   "b",
+                Info:   &filetree.FileInfo{
+                    Name:     "b",
+                    Path:     "b",
+                    TypeFlag: 0x0,
+                    Linkname: "",
+                    Data:     nil,
+                    Size:     0,
+                    Mode:     0x0,
+                    Uid:      0,
+                    Gid:      0,
+                    IsDir:    true,
+                },
+                Children: {
+                },
+            },
+        },
+    },
+    LayerName:     "",
+    WhiteoutFiles: nil,
+}
