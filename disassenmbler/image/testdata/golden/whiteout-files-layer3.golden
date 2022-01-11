@@ -1,0 +1,19 @@
+[
+  {
+    "Name": "eeeee",
+    "OriginalName": ".wh.eeeee",
+    "FileInfo": {
+      "Name": ".wh.eeeee",
+      "Path": "a/bb/ccc/dddd/.wh.eeeee",
+      "TypeFlag": 48,
+      "Linkname": "",
+      "Data": "",
+      "Size": 0,
+      "Mode": 384,
+      "Uid": 0,
+      "Gid": 0,
+      "IsDir": false
+    },
+    "WhiteoutType": 0
+  }
+]

@@ -1,6 +1,7 @@
 package image
 
 import (
+	"fmt"
 	"github.com/sebdah/goldie/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -22,8 +23,8 @@ func TestNewImageArchive(t *testing.T) {
 	g.AssertJson(t, "config", imageArchive.Config)
 
 	layerCounts := len(imageArchive.Manifest.LayerTarPaths)
-	lastLayer, ok := imageArchive.LayerMap[imageArchive.Manifest.LayerTarPaths[layerCounts-1]]
-	assert.True(t, ok)
+	lastLayer, err := imageArchive.GetFileTreeByLayerIndex(layerCounts - 1)
+	assert.NoError(t, err)
 	node := lastLayer.FindNodeFromPath("/a/bb/ccc/dddd/eeeee")
 	assert.NotNil(t, node)
 
@@ -37,4 +38,19 @@ func TestImageArchive_GetLatestFileNode(t *testing.T) {
 
 	assert.NotNil(t, imageArchive.GetLatestFileNode("/a/bb/ccc/dddd/eeeee"))
 	assert.Nil(t, imageArchive.GetLatestFileNode("/a/bb/ccc/dddd/eeeee/f"))
+}
+
+func TestCollectWhiteoutFiles(t *testing.T) {
+	imageTarName, _ := testutil.CreateTarImageFromDockerfile(t, "testdata/Dockerfile.whiteout-file")
+	buf := testutil.ReadFileForBuffer(t, imageTarName)
+	imageArchive, err := NewImageArchive(buf)
+	require.NoError(t, err)
+
+	g := goldie.New(t, goldie.WithFixtureDir("testdata/golden"))
+	for i := 0; i < len(imageArchive.Manifest.LayerTarPaths); i++ {
+		fileTree, err := imageArchive.GetFileTreeByLayerIndex(i)
+		require.NoError(t, err)
+
+		g.AssertJson(t, fmt.Sprintf("whiteout-files-layer%d", i), fileTree.WhiteoutFiles)
+	}
 }

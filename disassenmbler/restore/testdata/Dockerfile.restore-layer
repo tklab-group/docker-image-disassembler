@@ -1,0 +1,12 @@
+FROM ubuntu:hirsute-20211107
+
+RUN apt-get update \
+    && apt-get install -y \
+     tree
+
+RUN mkdir -p /a/aa
+RUN echo aa > /a/aa/aaa
+RUN echo aaa >> /a/aa/aaa
+RUN mkdir /a/aa/bbb
+RUN echo bbbb > /a/aa/bbb/bbbb
+RUN rm /a/aa/bbb/bbbb

@@ -1,0 +1,19 @@
+[
+  {
+    "Name": "ccc",
+    "OriginalName": ".wh.ccc",
+    "FileInfo": {
+      "Name": ".wh.ccc",
+      "Path": "a/bb/.wh.ccc",
+      "TypeFlag": 48,
+      "Linkname": "",
+      "Data": "",
+      "Size": 0,
+      "Mode": 384,
+      "Uid": 0,
+      "Gid": 0,
+      "IsDir": false
+    },
+    "WhiteoutType": 0
+  }
+]

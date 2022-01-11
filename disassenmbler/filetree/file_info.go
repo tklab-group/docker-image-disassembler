@@ -41,3 +41,10 @@ func NewFileInfoFromTarHeader(reader *tar.Reader, header *tar.Header) (*FileInfo
 		IsDir:    header.FileInfo().IsDir(),
 	}, nil
 }
+
+// Copy duplicates FileInfo.
+func (info *FileInfo) Copy() *FileInfo {
+	var fileInfo FileInfo
+	fileInfo = *info
+	return &fileInfo
+}
