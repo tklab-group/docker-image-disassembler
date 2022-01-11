@@ -13,6 +13,7 @@ require (
 require (
 	github.com/Microsoft/go-winio v0.4.17 // indirect
 	github.com/Microsoft/hcsshim v0.9.1 // indirect
+	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/containerd/cgroups v1.0.1 // indirect
 	github.com/containerd/containerd v1.5.8 // indirect
 	github.com/containerd/continuity v0.2.1 // indirect
@@ -26,6 +27,7 @@ require (
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/moby/locker v1.0.1 // indirect
 	github.com/moby/sys/mount v0.3.0 // indirect

@@ -53,7 +53,10 @@ func (node *FileNode) AddChild(name string, info *FileInfo) *FileNode {
 // Copy duplicates FileNode with new parent.
 func (node *FileNode) Copy(parent *FileNode) *FileNode {
 	newNode := NewFileNode(parent, node.Name, node.Info.Copy())
-	newNode.Tree = parent.Tree
+	if parent != nil {
+		newNode.Tree = parent.Tree
+	}
+
 	for name, child := range node.Children {
 		newNode.Children[name] = child.Copy(newNode)
 	}
