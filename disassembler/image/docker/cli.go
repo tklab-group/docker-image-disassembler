@@ -2,7 +2,7 @@ package docker
 
 import (
 	"fmt"
-	"github.com/tklab-group/docker-image-disassembler/disassenmbler/utils"
+	"github.com/tklab-group/docker-image-disassembler/disassembler/utils"
 	"io"
 	"os"
 	"os/exec"

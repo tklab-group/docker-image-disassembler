@@ -5,7 +5,7 @@ import (
 	"compress/gzip"
 	"fmt"
 	dockerimage "github.com/docker/docker/image"
-	"github.com/tklab-group/docker-image-disassembler/disassenmbler/filetree"
+	"github.com/tklab-group/docker-image-disassembler/disassembler/filetree"
 	"io"
 	"path"
 	"strings"

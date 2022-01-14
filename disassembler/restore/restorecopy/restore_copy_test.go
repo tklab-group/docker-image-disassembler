@@ -5,9 +5,9 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/stretchr/testify/require"
-	"github.com/tklab-group/docker-image-disassembler/disassenmbler/filetree"
-	"github.com/tklab-group/docker-image-disassembler/disassenmbler/image"
-	"github.com/tklab-group/docker-image-disassembler/disassenmbler/testutil"
+	"github.com/tklab-group/docker-image-disassembler/disassembler/filetree"
+	"github.com/tklab-group/docker-image-disassembler/disassembler/image"
+	"github.com/tklab-group/docker-image-disassembler/disassembler/testutil"
 	"testing"
 )
 

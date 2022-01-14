@@ -3,7 +3,7 @@ package filetree
 import (
 	"archive/tar"
 	"github.com/stretchr/testify/assert"
-	"github.com/tklab-group/docker-image-disassembler/disassenmbler/testutil"
+	"github.com/tklab-group/docker-image-disassembler/disassembler/testutil"
 	"io"
 	"testing"
 )
