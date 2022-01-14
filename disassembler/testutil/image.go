@@ -2,7 +2,7 @@ package testutil
 
 import (
 	"github.com/stretchr/testify/require"
-	"github.com/tklab-group/docker-image-disassembler/disassenmbler/image/docker"
+	"github.com/tklab-group/docker-image-disassembler/disassembler/image/docker"
 	"os"
 	"testing"
 )

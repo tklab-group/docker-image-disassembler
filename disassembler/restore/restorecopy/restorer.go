@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/moby/buildkit/frontend/dockerfile/instructions"
 	"github.com/moby/buildkit/frontend/dockerfile/parser"
-	"github.com/tklab-group/docker-image-disassembler/disassenmbler/image"
+	"github.com/tklab-group/docker-image-disassembler/disassembler/image"
 	"path/filepath"
 	"strings"
 )

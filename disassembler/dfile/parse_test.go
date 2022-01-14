@@ -5,9 +5,9 @@ import (
 	"github.com/kr/pretty"
 	"github.com/sebdah/goldie/v2"
 	"github.com/stretchr/testify/require"
-	"github.com/tklab-group/docker-image-disassembler/disassenmbler/image"
-	"github.com/tklab-group/docker-image-disassembler/disassenmbler/pkginfo"
-	"github.com/tklab-group/docker-image-disassembler/disassenmbler/testutil"
+	"github.com/tklab-group/docker-image-disassembler/disassembler/image"
+	"github.com/tklab-group/docker-image-disassembler/disassembler/pkginfo"
+	"github.com/tklab-group/docker-image-disassembler/disassembler/testutil"
 	"strings"
 	"testing"
 )

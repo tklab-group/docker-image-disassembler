@@ -5,7 +5,7 @@ import (
 	"github.com/sebdah/goldie/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tklab-group/docker-image-disassembler/disassenmbler/testutil"
+	"github.com/tklab-group/docker-image-disassembler/disassembler/testutil"
 	"testing"
 )
 

@@ -1,7 +1,7 @@
 package restore
 
 import (
-	"github.com/tklab-group/docker-image-disassembler/disassenmbler/filetree"
+	"github.com/tklab-group/docker-image-disassembler/disassembler/filetree"
 	"path/filepath"
 )
 

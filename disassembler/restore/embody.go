@@ -2,7 +2,7 @@ package restore
 
 import (
 	"fmt"
-	"github.com/tklab-group/docker-image-disassembler/disassenmbler/filetree"
+	"github.com/tklab-group/docker-image-disassembler/disassembler/filetree"
 	"os"
 	"path/filepath"
 )

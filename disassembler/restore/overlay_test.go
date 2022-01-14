@@ -4,7 +4,7 @@ import (
 	"github.com/kr/pretty"
 	"github.com/sebdah/goldie/v2"
 	"github.com/stretchr/testify/assert"
-	"github.com/tklab-group/docker-image-disassembler/disassenmbler/filetree"
+	"github.com/tklab-group/docker-image-disassembler/disassembler/filetree"
 	"testing"
 )
 
