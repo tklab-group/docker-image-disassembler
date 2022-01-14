@@ -4,6 +4,7 @@ import (
 	"archive/tar"
 	"compress/gzip"
 	"fmt"
+	dockerimage "github.com/docker/docker/image"
 	"github.com/tklab-group/docker-image-disassembler/disassenmbler/filetree"
 	"io"
 	"path"
@@ -178,4 +179,36 @@ func getFileList(tarReader *tar.Reader) ([]*filetree.FileInfo, error) {
 	}
 
 	return files, nil
+}
+
+type HistoryToLayer struct {
+	History dockerimage.History
+	Layer   *filetree.FileTree
+}
+
+// GetHistoryToLayers returns sets of a history and a layer.
+// It ignores a history which doesn't have a layer created by it.
+func (img *ImageArchive) GetHistoryToLayers() ([]*HistoryToLayer, error) {
+	list := make([]*HistoryToLayer, 0)
+	var layerIndex int
+	for _, history := range img.Config.History {
+		if history.EmptyLayer {
+			continue
+		}
+
+		layer, err := img.GetFileTreeByLayerIndex(layerIndex)
+		if err != nil {
+			return nil, fmt.Errorf("faild to get layer: %w", err)
+		}
+
+		historyToLayer := &HistoryToLayer{
+			History: history,
+			Layer:   layer,
+		}
+
+		list = append(list, historyToLayer)
+		layerIndex++
+	}
+
+	return list, nil
 }

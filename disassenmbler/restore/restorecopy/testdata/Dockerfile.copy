@@ -1,0 +1,10 @@
+FROM alpine:3.15.0
+
+WORKDIR /copied
+WORKDIR a-file
+COPY testdata/src/a a-copied
+
+COPY testdata/src/b /copied/b-file
+
+WORKDIR /copied
+COPY testdata/src/*/cc c-file/
