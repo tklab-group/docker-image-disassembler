@@ -184,6 +184,7 @@ func getFileList(tarReader *tar.Reader) ([]*filetree.FileInfo, error) {
 type HistoryToLayer struct {
 	History dockerimage.History
 	Layer   *filetree.FileTree
+	LayerID string
 }
 
 // GetHistoryToLayers returns sets of a history and a layer.
@@ -204,6 +205,7 @@ func (img *ImageArchive) GetHistoryToLayers() ([]*HistoryToLayer, error) {
 		historyToLayer := &HistoryToLayer{
 			History: history,
 			Layer:   layer,
+			LayerID: strings.TrimSuffix(img.Manifest.LayerTarPaths[layerIndex], "/layer.tar"),
 		}
 
 		list = append(list, historyToLayer)
