@@ -4,6 +4,7 @@ import (
 	dockerimage "github.com/docker/docker/image"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/tklab-group/docker-image-disassembler/disassembler/filetree"
 	"github.com/tklab-group/docker-image-disassembler/disassembler/image"
@@ -122,11 +123,16 @@ func TestRestoreCopiedObjects(t *testing.T) {
 	}
 
 	opts := []cmp.Option{
+		cmpopts.IgnoreFields(CopiedObject{}, "LayerID"),
 		cmpopts.IgnoreFields(dockerimage.History{}, "Created", "Author", "Comment"),
 		cmpopts.IgnoreFields(filetree.FileNode{}, "Tree", "Parent"),
 	}
 
 	if diff := cmp.Diff(want, copiedObjects, opts...); diff != "" {
 		t.Errorf("copiedObjects mismatch (-want +got):\n%s", diff)
+	}
+
+	for _, copiedObject := range copiedObjects {
+		assert.NotEqual(t, "", copiedObject.LayerID)
 	}
 }
