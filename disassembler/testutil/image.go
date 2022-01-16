@@ -10,15 +10,12 @@ import (
 // CreateTarImageFromDockerfile builds docker image from dockerfile and exports the image as a tar file.
 // The tar file is automatically removed when the test complete.
 func CreateTarImageFromDockerfile(t *testing.T, path string) (imageTarName string, imageID string) {
-	iid, err := docker.BuildImageFromCli([]string{"-f", path, "."})
-	require.NoError(t, err)
-
 	tmpDir := t.TempDir()
-	imageTar, err := os.CreateTemp(tmpDir, "dockerimage-*.tar")
+	tarFile, err := os.CreateTemp(tmpDir, "dockerimage-*.tar")
 	require.NoError(t, err)
 
-	err = docker.RunDockerCmd("save", []string{iid, "-o", imageTar.Name()}, nil)
+	iid, err := docker.CreateTarImageFromDockerfile(path, tarFile.Name())
 	require.NoError(t, err)
 
-	return imageTar.Name(), iid
+	return tarFile.Name(), iid
 }
