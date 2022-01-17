@@ -11,5 +11,6 @@ go install github.com/tklab-group/docker-image-disassembler
 ### Usage
 
 ```shell
-docker-image-disassembler check-pkg [Dockerfile]
+docker-image-disassembler check-pkg Dockerfile
+docker-image-disassembler restore-copy imageID targetPath
 ```
