@@ -104,7 +104,7 @@ func embodyCopiedObjects(targetPath string, copiedObjects []*restorecopy.CopiedO
 
 func outLayerID(out io.Writer, copiedObjects []*restorecopy.CopiedObject) error {
 	for _, copiedObject := range copiedObjects {
-		_, err := fmt.Fprintf(out, "%s: `%s\n", copiedObject.LayerID, copiedObject.History.CreatedBy)
+		_, err := fmt.Fprintf(out, "%s: `%s`\n", copiedObject.LayerID, copiedObject.History.CreatedBy)
 		if err != nil {
 			return fmt.Errorf("faild to output: %w", err)
 		}
