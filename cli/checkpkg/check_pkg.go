@@ -18,9 +18,8 @@ import (
 
 func Cmd(config config.Config) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   cmdname.CheckPkgCmdName,
-		Short: fmt.Sprintf("%s %s [Dockerfile]", cmdname.RootCmdName, cmdname.CheckPkgCmdName),
-		Long: `check-pkg prints the difference of the packages versions between Dockerfile and the built image by it.
+		Use: fmt.Sprintf("%s Dockerfile", cmdname.CheckPkgCmdName),
+		Short: `check-pkg prints the difference of the packages versions between Dockerfile and the built image by it.
 check-pkg requires 1 argument to specify the target Dockerfile.`,
 		Args: cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

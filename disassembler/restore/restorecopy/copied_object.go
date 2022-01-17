@@ -6,6 +6,7 @@ import (
 )
 
 type CopiedObject struct {
+	LayerID string
 	History dockerimage.History
 	Object  *filetree.FileNode
 }

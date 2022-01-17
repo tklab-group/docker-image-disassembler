@@ -80,6 +80,7 @@ func (r *restorer) handleCopy(node *parser.Node, historyToLayer *image.HistoryTo
 	}
 
 	copiedObject := &CopiedObject{
+		LayerID: historyToLayer.LayerID,
 		History: historyToLayer.History,
 	}
 
