@@ -16,6 +16,8 @@ import (
 	"strings"
 )
 
+const flagNameImageID = "imageID"
+
 func Cmd(config config.Config) *cobra.Command {
 	cmd := &cobra.Command{
 		Use: fmt.Sprintf("%s Dockerfile", cmdname.CheckPkgCmdName),
@@ -23,7 +25,14 @@ func Cmd(config config.Config) *cobra.Command {
 check-pkg requires 1 argument to specify the target Dockerfile.`,
 		Args: cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			packageInfos, err := checkPackageInformation(args[0])
+			flagImageID := cmd.Flag(flagNameImageID)
+			var imageID *string
+			if flagImageID != nil && flagImageID.Value.String() != "" {
+				_imageID := flagImageID.Value.String()
+				imageID = &_imageID
+			}
+
+			packageInfos, err := checkPackageInformation(args[0], imageID)
 			if err != nil {
 				return err
 			}
@@ -39,6 +48,8 @@ check-pkg requires 1 argument to specify the target Dockerfile.`,
 	cmd.SetOut(config.Out)
 	cmd.SetErr(config.Err)
 
+	cmd.Flags().String(flagNameImageID, "", "specify docker image identifier to compare with Dockerfile")
+
 	return cmd
 }
 
@@ -48,7 +59,7 @@ type packageInfo struct {
 	versionInImage string
 }
 
-func checkPackageInformation(dfilePath string) ([]packageInfo, error) {
+func checkPackageInformation(dfilePath string, imageID *string) ([]packageInfo, error) {
 	file, err := os.ReadFile(dfilePath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read %s: %w", dfilePath, err)
@@ -60,9 +71,17 @@ func checkPackageInformation(dfilePath string) ([]packageInfo, error) {
 		return nil, fmt.Errorf("failed to parse %s as Dockerfile: %w", dfilePath, err)
 	}
 
-	aptPkgInfoMap, err := getAptPkgInfoInImageFromDfile(dfilePath)
-	if err != nil {
-		return nil, err
+	var aptPkgInfoMap map[string]string
+	if imageID != nil {
+		aptPkgInfoMap, err = getAptPkgInfoInImageFromImageID(*imageID)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		aptPkgInfoMap, err = getAptPkgInfoInImageFromDfile(dfilePath)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	packageInfos := make([]packageInfo, 0)
@@ -94,6 +113,30 @@ func checkPackageInformation(dfilePath string) ([]packageInfo, error) {
 	return packageInfos, nil
 }
 
+func getAptPkgInfoInImageFromImageID(imageID string) (map[string]string, error) {
+	imageTarFile, err := os.CreateTemp("/tmp", "dockerimage-*.tar")
+	if err != nil {
+		return nil, fmt.Errorf("failed to create temp file: %w", err)
+	}
+	err = imageTarFile.Close()
+	if err != nil {
+		return nil, fmt.Errorf("failed to close temp file: %w", err)
+	}
+	defer os.Remove(imageTarFile.Name())
+
+	err = docker.RunDockerCmd("save", []string{imageID, "-o", imageTarFile.Name()}, nil)
+
+	imageTarFile, err = os.Open(imageTarFile.Name())
+	reader := bufio.NewReader(imageTarFile)
+
+	imageArchive, err := image.NewImageArchive(reader)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse image tar file: %w", err)
+	}
+
+	return getAptPkgInfoInImageFromImageArchive(imageArchive)
+}
+
 func getAptPkgInfoInImageFromDfile(dfilePath string) (map[string]string, error) {
 	imageTarFile, err := os.CreateTemp("/tmp", "dockerimage-*.tar")
 	if err != nil {
@@ -117,6 +160,10 @@ func getAptPkgInfoInImageFromDfile(dfilePath string) (map[string]string, error) 
 		return nil, fmt.Errorf("failed to parse image tar file: %w", err)
 	}
 
+	return getAptPkgInfoInImageFromImageArchive(imageArchive)
+}
+
+func getAptPkgInfoInImageFromImageArchive(imageArchive *image.ImageArchive) (map[string]string, error) {
 	aptPkgFile := imageArchive.GetLatestFileNode(pkginfo.AptPkgFilePath)
 	if aptPkgFile == nil {
 		return nil, fmt.Errorf("faild to get %s in the image", pkginfo.AptPkgFilePath)
@@ -124,6 +171,9 @@ func getAptPkgInfoInImageFromDfile(dfilePath string) (map[string]string, error) 
 
 	buf := bytes.NewBuffer(aptPkgFile.Info.Data)
 	aptPkgInfos, err := pkginfo.ReadAptPkgInfos(buf)
+	if err != nil {
+		return nil, fmt.Errorf("faild to read apt package file: %w", err)
+	}
 
 	aptPkgInfoMap := map[string]string{}
 	for _, aptPkgInfo := range aptPkgInfos {

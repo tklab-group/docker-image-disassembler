@@ -8,7 +8,7 @@ import (
 )
 
 func Test_checkPackageInformation(t *testing.T) {
-	got, err := checkPackageInformation("testdata/Dockerfile")
+	got, err := checkPackageInformation("testdata/Dockerfile", nil)
 	require.NoError(t, err)
 
 	require.Len(t, got, 2)
