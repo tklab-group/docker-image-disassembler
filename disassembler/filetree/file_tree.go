@@ -75,6 +75,10 @@ func (tree *FileTree) FindNodeFromPath(pathStr string) *FileNode {
 	nodeNames := strings.Split(strings.Trim(path.Clean(pathStr), "/"), "/")
 	node := tree.Root
 	for _, name := range nodeNames {
+		if name == "" {
+			continue
+		}
+
 		n, exist := node.Children[name]
 		if !exist {
 			return nil
