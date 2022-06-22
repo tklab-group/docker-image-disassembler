@@ -120,13 +120,30 @@ func fileToMap(path string) (map[string]int, error) {
 		path := split[0]
 		dataSize, err := strconv.Atoi(split[1])
 		if err != nil {
-			return nil, fmt.Errorf("failed to parse as datasize: line: `%s` err: %w", line, err)
+			// return nil, fmt.Errorf("failed to parse as datasize: line: `%s` err: %w", line, err)
+			fmt.Println(fmt.Errorf("failed to parse as datasize: line: `%s` err: %w", line, err))
+			continue
+		}
+
+		// add ignores
+		if isIgnorePath(path) {
+			continue
 		}
 
 		m[path] = dataSize
 	}
 
 	return m, nil
+}
+
+func isIgnorePath(path string) bool {
+	ignorePrefixs := []string{"./sys", "./proc"}
+	for _, ignorePrefix := range ignorePrefixs {
+		if strings.HasPrefix(path, ignorePrefix) {
+			return true
+		}
+	}
+	return false
 }
 
 func outResult(result *ComparedResult, fileA string, fileB string, out io.Writer) error {
