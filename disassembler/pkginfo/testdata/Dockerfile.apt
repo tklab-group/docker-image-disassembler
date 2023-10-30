@@ -1,7 +1,7 @@
-FROM ubuntu:hirsute-20211107
+FROM ubuntu:lunar-20231004
 
 RUN apt-get update \
     && apt-get install -y --allow-downgrades \
-     tzdata=2021a-1ubuntu1
+     tzdata=2023c-2exp1ubuntu1
 
-# Latest version for tzdata is 2021e-0ubuntu0.21.04 (2021/12/16)
+# Latest version for tzdata is 2023c-2exp1ubuntu1.1 (2023/10/30)
