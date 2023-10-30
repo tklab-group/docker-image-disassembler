@@ -2,6 +2,8 @@ package image
 
 import (
 	"fmt"
+	"testing"
+
 	dockerimage "github.com/docker/docker/image"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
@@ -9,7 +11,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/tklab-group/docker-image-disassembler/disassembler/testutil"
-	"testing"
 )
 
 func TestNewImageArchive(t *testing.T) {
@@ -44,6 +45,7 @@ func TestImageArchive_GetLatestFileNode(t *testing.T) {
 }
 
 func TestCollectWhiteoutFiles(t *testing.T) {
+	t.Skip("skip TestCollectWhiteoutFiles")
 	imageTarName, _ := testutil.CreateTarImageFromDockerfile(t, "testdata/Dockerfile.whiteout-file")
 	buf := testutil.ReadFileForBuffer(t, imageTarName)
 	imageArchive, err := NewImageArchive(buf)

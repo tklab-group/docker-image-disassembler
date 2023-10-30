@@ -3,15 +3,16 @@ package pkginfo
 import (
 	"bytes"
 	"fmt"
+	"html/template"
+	"strings"
+	"testing"
+
 	"github.com/sebdah/goldie/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/tklab-group/docker-image-disassembler/disassembler/image"
 	"github.com/tklab-group/docker-image-disassembler/disassembler/image/docker"
 	"github.com/tklab-group/docker-image-disassembler/disassembler/testutil"
-	"html/template"
-	"strings"
-	"testing"
 )
 
 func TestReadAptPkgInfos(t *testing.T) {
@@ -56,7 +57,7 @@ RUN apt-get update \
 	tpl, err := template.New("").Parse(dockerfileTemplate)
 	require.NoError(t, err)
 	m := map[string]interface{}{
-		"baseImage": "ubuntu:hirsute-20211107",
+		"baseImage": "ubuntu:lunar-20231004",
 	}
 	dockerfileBuf := bytes.Buffer{}
 	err = tpl.Execute(&dockerfileBuf, m)

@@ -2,9 +2,10 @@ package checkpkg
 
 import (
 	"bytes"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func Test_checkPackageInformation(t *testing.T) {
@@ -17,8 +18,8 @@ func Test_checkPackageInformation(t *testing.T) {
 	assert.NotEqual(t, got[0].versionInImage, "")
 
 	assert.Equal(t, got[1].name, "wget")
-	assert.Equal(t, got[1].versionInDfile, "1.21-1ubuntu3")
-	assert.Equal(t, got[1].versionInImage, "1.21-1ubuntu3")
+	assert.Equal(t, got[1].versionInDfile, "1.21.3-1ubuntu1")
+	assert.Equal(t, got[1].versionInImage, "1.21.3-1ubuntu1")
 }
 
 func Test_getAptPkgInfoInImageFromDfile(t *testing.T) {
@@ -26,7 +27,7 @@ func Test_getAptPkgInfoInImageFromDfile(t *testing.T) {
 	require.NoError(t, err)
 	assert.True(t, len(got) > 2)
 	assert.NotEqual(t, got["tzdata"], "")
-	assert.Equal(t, got["wget"], "1.21-1ubuntu3")
+	assert.Equal(t, got["wget"], "1.21.3-1ubuntu1")
 }
 
 func Test_outPackageVersionDiff(t *testing.T) {
