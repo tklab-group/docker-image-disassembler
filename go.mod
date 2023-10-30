@@ -1,6 +1,6 @@
 module github.com/tklab-group/docker-image-disassembler
 
-go 1.17
+go 1.21
 
 require (
 	github.com/docker/docker v20.10.12+incompatible
