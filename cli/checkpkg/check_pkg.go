@@ -1,16 +1,13 @@
 package checkpkg
 
 import (
-	"bufio"
 	"bytes"
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/tklab-group/docker-image-disassembler/cli/cmdname"
 	"github.com/tklab-group/docker-image-disassembler/cli/config"
+	"github.com/tklab-group/docker-image-disassembler/disassembler"
 	"github.com/tklab-group/docker-image-disassembler/disassembler/dfile"
-	"github.com/tklab-group/docker-image-disassembler/disassembler/image"
-	"github.com/tklab-group/docker-image-disassembler/disassembler/image/docker"
-	"github.com/tklab-group/docker-image-disassembler/disassembler/pkginfo"
 	"io"
 	"os"
 	"strings"
@@ -73,12 +70,12 @@ func checkPackageInformation(dfilePath string, imageID *string) ([]packageInfo, 
 
 	var aptPkgInfoMap map[string]string
 	if imageID != nil {
-		aptPkgInfoMap, err = getAptPkgInfoInImageFromImageID(*imageID)
+		aptPkgInfoMap, err = disassembler.GetAptPkgInfoInImageFromImageID(*imageID)
 		if err != nil {
 			return nil, err
 		}
 	} else {
-		aptPkgInfoMap, err = getAptPkgInfoInImageFromDfile(dfilePath)
+		aptPkgInfoMap, err = disassembler.GetAptPkgInfoInImageFromDfile(dfilePath)
 		if err != nil {
 			return nil, err
 		}
@@ -111,76 +108,6 @@ func checkPackageInformation(dfilePath string, imageID *string) ([]packageInfo, 
 	}
 
 	return packageInfos, nil
-}
-
-func getAptPkgInfoInImageFromImageID(imageID string) (map[string]string, error) {
-	imageTarFile, err := os.CreateTemp("/tmp", "dockerimage-*.tar")
-	if err != nil {
-		return nil, fmt.Errorf("failed to create temp file: %w", err)
-	}
-	err = imageTarFile.Close()
-	if err != nil {
-		return nil, fmt.Errorf("failed to close temp file: %w", err)
-	}
-	defer os.Remove(imageTarFile.Name())
-
-	err = docker.RunDockerCmd("save", []string{imageID, "-o", imageTarFile.Name()}, nil)
-
-	imageTarFile, err = os.Open(imageTarFile.Name())
-	reader := bufio.NewReader(imageTarFile)
-
-	imageArchive, err := image.NewImageArchive(reader)
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse image tar file: %w", err)
-	}
-
-	return getAptPkgInfoInImageFromImageArchive(imageArchive)
-}
-
-func getAptPkgInfoInImageFromDfile(dfilePath string) (map[string]string, error) {
-	imageTarFile, err := os.CreateTemp("/tmp", "dockerimage-*.tar")
-	if err != nil {
-		return nil, fmt.Errorf("failed to create temp file: %w", err)
-	}
-	err = imageTarFile.Close()
-	if err != nil {
-		return nil, fmt.Errorf("failed to close temp file: %w", err)
-	}
-	defer os.Remove(imageTarFile.Name())
-
-	_, err = docker.CreateTarImageFromDockerfile(dfilePath, imageTarFile.Name())
-	if err != nil {
-		return nil, fmt.Errorf("failed to build image: %w", err)
-	}
-	imageTarFile, err = os.Open(imageTarFile.Name())
-	reader := bufio.NewReader(imageTarFile)
-
-	imageArchive, err := image.NewImageArchive(reader)
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse image tar file: %w", err)
-	}
-
-	return getAptPkgInfoInImageFromImageArchive(imageArchive)
-}
-
-func getAptPkgInfoInImageFromImageArchive(imageArchive *image.ImageArchive) (map[string]string, error) {
-	aptPkgFile := imageArchive.GetLatestFileNode(pkginfo.AptPkgFilePath)
-	if aptPkgFile == nil {
-		return nil, fmt.Errorf("faild to get %s in the image", pkginfo.AptPkgFilePath)
-	}
-
-	buf := bytes.NewBuffer(aptPkgFile.Info.Data)
-	aptPkgInfos, err := pkginfo.ReadAptPkgInfos(buf)
-	if err != nil {
-		return nil, fmt.Errorf("faild to read apt package file: %w", err)
-	}
-
-	aptPkgInfoMap := map[string]string{}
-	for _, aptPkgInfo := range aptPkgInfos {
-		aptPkgInfoMap[aptPkgInfo.Package] = aptPkgInfo.Version
-	}
-
-	return aptPkgInfoMap, nil
 }
 
 func outPackageVersionDiff(out io.Writer, packageInfos []packageInfo) error {
