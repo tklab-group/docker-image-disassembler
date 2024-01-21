@@ -6,6 +6,7 @@ import (
 	"github.com/tklab-group/docker-image-disassembler/cli/checkpkg"
 	"github.com/tklab-group/docker-image-disassembler/cli/cmdname"
 	"github.com/tklab-group/docker-image-disassembler/cli/config"
+	"github.com/tklab-group/docker-image-disassembler/cli/listPkg"
 	"github.com/tklab-group/docker-image-disassembler/cli/restorecopy"
 	"os"
 )
@@ -23,6 +24,7 @@ func newRoodCmd(config config.Config) *cobra.Command {
 	rootCmd.AddCommand(
 		checkpkg.Cmd(config),
 		restorecopy.Cmd(config),
+		listPkg.Cmd(config),
 	)
 
 	return rootCmd
