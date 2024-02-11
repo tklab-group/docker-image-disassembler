@@ -2,13 +2,14 @@ package cli
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/spf13/cobra"
 	"github.com/tklab-group/docker-image-disassembler/cli/checkpkg"
 	"github.com/tklab-group/docker-image-disassembler/cli/cmdname"
 	"github.com/tklab-group/docker-image-disassembler/cli/config"
 	"github.com/tklab-group/docker-image-disassembler/cli/listPkg"
 	"github.com/tklab-group/docker-image-disassembler/cli/restorecopy"
-	"os"
 )
 
 func newRoodCmd(config config.Config) *cobra.Command {
@@ -32,7 +33,7 @@ func newRoodCmd(config config.Config) *cobra.Command {
 
 func Execute(config config.Config) {
 	if err := newRoodCmd(config).Execute(); err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }

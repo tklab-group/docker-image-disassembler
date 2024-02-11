@@ -1,9 +1,10 @@
 package main
 
 import (
+	"os"
+
 	"github.com/tklab-group/docker-image-disassembler/cli"
 	"github.com/tklab-group/docker-image-disassembler/cli/config"
-	"os"
 )
 
 func main() {
