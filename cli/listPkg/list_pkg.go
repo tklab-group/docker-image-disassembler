@@ -3,6 +3,7 @@ package listPkg
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/spf13/cobra"
 	"github.com/tklab-group/docker-image-disassembler/cli/cmdname"
 	"github.com/tklab-group/docker-image-disassembler/cli/config"
@@ -32,7 +33,7 @@ func Cmd(config config.Config) *cobra.Command {
 				return err
 			}
 
-			fmt.Fprintf(config.Out, "s", string(b))
+			fmt.Fprintf(config.Out, "%s", string(b))
 
 			return nil
 		},
