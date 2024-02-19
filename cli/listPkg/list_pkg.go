@@ -13,9 +13,10 @@ import (
 func Cmd(config config.Config) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   fmt.Sprintf("%s imageID", cmdname.ListPkgCmdName),
-		Short: `list-pkg prints packages and their versions in the image`,
-		Long:  `Currently only packages installed with apt are supported`,
-		Args:  cobra.MinimumNArgs(1),
+		Short: "Print the packages and their versions in the image",
+		Long: `list-pkg prints the packages and their versions in the image as JSON format.
+Currently only packages installed with apt are supported`,
+		Args: cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			imageID := args[0]
 

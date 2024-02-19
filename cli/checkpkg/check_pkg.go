@@ -3,22 +3,24 @@ package checkpkg
 import (
 	"bytes"
 	"fmt"
+	"io"
+	"os"
+	"strings"
+
 	"github.com/spf13/cobra"
 	"github.com/tklab-group/docker-image-disassembler/cli/cmdname"
 	"github.com/tklab-group/docker-image-disassembler/cli/config"
 	"github.com/tklab-group/docker-image-disassembler/disassembler"
 	"github.com/tklab-group/docker-image-disassembler/disassembler/dfile"
-	"io"
-	"os"
-	"strings"
 )
 
 const flagNameImageID = "imageID"
 
 func Cmd(config config.Config) *cobra.Command {
 	cmd := &cobra.Command{
-		Use: fmt.Sprintf("%s Dockerfile", cmdname.CheckPkgCmdName),
-		Short: `check-pkg prints the difference of the packages versions between Dockerfile and the built image by it.
+		Use:   fmt.Sprintf("%s Dockerfile", cmdname.CheckPkgCmdName),
+		Short: "Print the difference of the packages versions between Dockerfile and the built image by it",
+		Long: `check-pkg prints the difference of the packages versions between Dockerfile and the built image by it.
 check-pkg requires 1 argument to specify the target Dockerfile.`,
 		Args: cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

@@ -15,8 +15,7 @@ import (
 func newRoodCmd(config config.Config) *cobra.Command {
 	rootCmd := &cobra.Command{
 		Use:   cmdname.RootCmdName,
-		Short: "", // TODO
-		Long:  "", // TODO
+		Short: "Docker Image Disassembler",
 	}
 	rootCmd.SetIn(config.In)
 	rootCmd.SetOut(config.Out)

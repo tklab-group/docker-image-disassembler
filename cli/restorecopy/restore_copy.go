@@ -3,6 +3,10 @@ package restorecopy
 import (
 	"bufio"
 	"fmt"
+	"io"
+	"os"
+	"path/filepath"
+
 	"github.com/spf13/cobra"
 	"github.com/tklab-group/docker-image-disassembler/cli/cmdname"
 	"github.com/tklab-group/docker-image-disassembler/cli/config"
@@ -10,15 +14,13 @@ import (
 	"github.com/tklab-group/docker-image-disassembler/disassembler/image/docker"
 	"github.com/tklab-group/docker-image-disassembler/disassembler/restore"
 	"github.com/tklab-group/docker-image-disassembler/disassembler/restore/restorecopy"
-	"io"
-	"os"
-	"path/filepath"
 )
 
 func Cmd(config config.Config) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   fmt.Sprintf("%s imageID targetPath", cmdname.RestoreCopyCmdName),
-		Short: `restore-copy extracts copied files from the image and embodies them at the target path.`,
+		Short: "Extracts copied files from the image and embodies them at the target path",
+		Long:  `restore-copy extracts files, copied to the image by COPY instruction, from the image and embodies them at the target path.`,
 		Args:  cobra.MinimumNArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			copiedObjects, err := restoreCopiedObjects(args[0])
