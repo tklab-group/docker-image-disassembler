@@ -1,5 +1,9 @@
 # Docker Image Disassembler
 
+![GitHub Release](https://img.shields.io/github/v/release/tklab-group/docker-image-disassembler)
+![GitHub License](https://img.shields.io/github/license/tklab-group/docker-image-disassembler)
+
+
 `docker-image-disassembler` is a CLI tool for extracting package versions and copied files from Docker image.
 
 For package versions, it currently supports only packages installed via `apt`.
