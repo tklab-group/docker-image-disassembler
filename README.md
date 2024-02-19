@@ -37,7 +37,7 @@ Extracts files, copied to the image by COPY instruction, from the image and embo
 ### Go tools
 
 ```shell
-go install github.com/tklab-group/docker-image-disassembler@latest
+go get github.com/tklab-group/docker-image-disassembler
 ```
 
 ### Binary
