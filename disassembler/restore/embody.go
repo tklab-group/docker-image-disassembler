@@ -33,18 +33,22 @@ func EmbodyFileNode(parentPath string, fileNode *filetree.FileNode) error {
 	}
 
 	tmpPath := filepath.Join(parentPath, fileNode.Name)
+
 	// Embody the node.
-	if fileNode.Info.IsDir {
-		// Ignore its file mode in container.
-		err := os.Mkdir(tmpPath, 0777)
-		if err != nil {
-			return fmt.Errorf("faild to embody FileNode as directory: %w", err)
-		}
-	} else {
-		// Ignore its file mode in container.
-		err := os.WriteFile(tmpPath, fileNode.Info.Data, 0777)
-		if err != nil {
-			return fmt.Errorf("faild to embody FileNode as file: %w", err)
+	// Skip if fileNode is dummy node.
+	if fileNode.Name != "" {
+		if fileNode.Info.IsDir {
+			// Ignore its file mode in container.
+			err := os.Mkdir(tmpPath, 0777)
+			if err != nil {
+				return fmt.Errorf("faild to embody FileNode as directory: %w", err)
+			}
+		} else {
+			// Ignore its file mode in container.
+			err := os.WriteFile(tmpPath, fileNode.Info.Data, 0777)
+			if err != nil {
+				return fmt.Errorf("faild to embody FileNode as file: %w", err)
+			}
 		}
 	}
 

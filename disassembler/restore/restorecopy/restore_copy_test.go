@@ -8,7 +8,9 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tklab-group/docker-image-disassembler/disassembler/filetree"
 	"github.com/tklab-group/docker-image-disassembler/disassembler/image"
+	"github.com/tklab-group/docker-image-disassembler/disassembler/image/docker"
 	"github.com/tklab-group/docker-image-disassembler/disassembler/testutil"
+	"os"
 	"testing"
 )
 
@@ -135,4 +137,25 @@ func TestRestoreCopiedObjects(t *testing.T) {
 	for _, copiedObject := range copiedObjects {
 		assert.NotEqual(t, "", copiedObject.LayerID)
 	}
+}
+
+func TestRestoreCopiedObjects2(t *testing.T) {
+	iid := "hello-world"
+	err := docker.RunDockerCmd("pull", []string{iid}, nil)
+	require.NoError(t, err)
+
+	tmpDir := t.TempDir()
+	tarFile, err := os.CreateTemp(tmpDir, "dockerimage-*.tar")
+	require.NoError(t, err)
+
+	err = docker.RunDockerCmd("save", []string{iid, "-o", tarFile.Name()}, nil)
+
+	buf := testutil.ReadFileForBuffer(t, tarFile.Name())
+	imageArchive, err := image.NewImageArchive(buf)
+	require.NoError(t, err)
+
+	copiedObjects, err := RestoreCopiedObjects(imageArchive)
+	require.NoError(t, err)
+
+	assert.Len(t, copiedObjects, 1)
 }
