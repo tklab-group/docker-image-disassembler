@@ -1,5 +1,17 @@
 # 開発について
 
+## リリース
+
+[goreleaser/goreleaser](https://github.com/goreleaser/goreleaser)を使用したCIでのリリースの設定をしている。
+
+関連ファイル:
+- `.github/workflows/release.yml`
+- `.goreleaser.yaml`
+
+新バージョンをリリースするときは、`v0.0.0`形式(e.g. `v1.2.3`)のgitタグを作成してpushするだけ。
+GitHub Actionsが回ってバイナリの作成や[Releases](https://github.com/tklab-group/docker-image-disassembler/releases)へのアップロードが行われる
+
+
 ## テスト
 
 ### テストの実行
