@@ -8,4 +8,4 @@ test-nocache:
 
 # Update golden testing.
 test-update:
-	go test -update ./...
+	go test ./... -update

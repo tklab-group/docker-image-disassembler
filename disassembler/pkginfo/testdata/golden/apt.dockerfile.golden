@@ -87,7 +87,7 @@ RUN apt-get update \
 	sysvinit-utils=3.06-2ubuntu1 \
 	tar=1.34+dfsg-1.2ubuntu0.1 \
 	tzdata=2023c-2exp1ubuntu1 \
-	tzdata-icu=2023c-2exp1ubuntu1.1 \
+	tzdata-icu=2023d-0ubuntu0.23.04 \
 	ubuntu-keyring=2021.03.26 \
 	usrmerge=33ubuntu1 \
 	util-linux=2.38.1-4ubuntu1 \
