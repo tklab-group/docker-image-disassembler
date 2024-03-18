@@ -8,11 +8,6 @@
 
 For package versions, it currently supports only packages installed via `apt`.
 
-> [!WARNING]
-> Currently it doesn't support new Docker image format.
->
-> Use `docker-image-disassembler` with Docker Engine older version than `v25.0`.
-
 ## Usage
 
 ### `list-pkg`
