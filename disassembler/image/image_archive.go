@@ -2,13 +2,17 @@ package image
 
 import (
 	"archive/tar"
+	"bytes"
 	"compress/gzip"
+	"encoding/json"
+	"errors"
 	"fmt"
-	dockerimage "github.com/docker/docker/image"
-	"github.com/tklab-group/docker-image-disassembler/disassembler/filetree"
 	"io"
 	"path"
 	"strings"
+
+	dockerimage "github.com/docker/docker/image"
+	"github.com/tklab-group/docker-image-disassembler/disassembler/filetree"
 )
 
 type ImageArchive struct {
@@ -71,6 +75,46 @@ func NewImageArchive(tarFile io.Reader) (*ImageArchive, error) {
 
 				jsonFiles[name] = fileBuffer
 			}
+		} else if strings.HasPrefix(name, "blobs/") {
+			// For the OCI-compatible image format (used since Docker 25)
+
+			buffer := make([]byte, 1024)
+			n, err := io.ReadFull(tarReader, buffer)
+			if err != nil && !errors.Is(err, io.ErrUnexpectedEOF) {
+				return img, err
+			}
+
+			// Only try reading a TAR if file is "big enough"
+			if n == cap(buffer) {
+				var unwrappedReader io.Reader
+				unwrappedReader, err = gzip.NewReader(io.MultiReader(bytes.NewReader(buffer[:n]), tarReader))
+				if err != nil {
+					// Not a gzipped entry
+					unwrappedReader = io.MultiReader(bytes.NewReader(buffer[:n]), tarReader)
+				}
+
+				// Try reading a TAR
+				layerReader := tar.NewReader(unwrappedReader)
+				tree, err := processLayerTar(name, layerReader)
+				if err == nil {
+					// add the layer to the image
+					img.LayerMap[tree.LayerName] = tree
+					continue
+				}
+			}
+
+			// Not a TAR (or smaller than our buffer), might be a JSON file
+			decoder := json.NewDecoder(bytes.NewReader(buffer[:n]))
+			token, err := decoder.Token()
+			if _, ok := token.(json.Delim); err == nil && ok {
+				// Looks like a JSON object (or array)
+				fileBuffer, err := io.ReadAll(io.MultiReader(bytes.NewReader(buffer[:n]), tarReader))
+				if err != nil {
+					return img, err
+				}
+				jsonFiles[name] = fileBuffer
+			}
+			// Ignore every other unknown file type
 		}
 	}
 
