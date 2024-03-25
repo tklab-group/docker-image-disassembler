@@ -39,7 +39,7 @@ func NewImageArchive(tarFile io.Reader) (*ImageArchive, error) {
 				break
 			}
 
-			return nil, err
+			return nil, fmt.Errorf("failed to read tar file: %w", err)
 		}
 
 		name := header.Name
@@ -50,42 +50,55 @@ func NewImageArchive(tarFile io.Reader) (*ImageArchive, error) {
 				layerReader := tar.NewReader(tarReader)
 				tree, err := processLayerTar(name, layerReader)
 				if err != nil {
-					return nil, err
+					return nil, fmt.Errorf("failed to process layer tar: %w", err)
 				}
 
 				img.LayerMap[tree.LayerName] = tree
+				continue
 			} else if strings.HasSuffix(name, ".tar.gz") || strings.HasSuffix(name, "tgz") {
 				gzipReader, err := gzip.NewReader(tarReader)
 				if err != nil {
-					return nil, err
+					return nil, fmt.Errorf("failed to create gzip reader: %w", err)
 				}
 
 				layerReader := tar.NewReader(gzipReader)
 				tree, err := processLayerTar(name, layerReader)
 				if err != nil {
-					return nil, err
+					return nil, fmt.Errorf("failed to process layer tar: %w", err)
 				}
 
 				img.LayerMap[tree.LayerName] = tree
+				continue
 			} else if strings.HasSuffix(name, ".json") || strings.HasPrefix(name, "sha256:") {
 				fileBuffer, err := io.ReadAll(tarReader)
 				if err != nil {
-					return nil, err
+					return nil, fmt.Errorf("failed to read json file(%s): %w", name, err)
 				}
 
 				jsonFiles[name] = fileBuffer
+				continue
 			}
-		} else if strings.HasPrefix(name, "blobs/") {
+		}
+		if strings.HasPrefix(name, "blobs/") {
 			// For the OCI-compatible image format (used since Docker 25)
 
 			buffer := make([]byte, 1024)
 			n, err := io.ReadFull(tarReader, buffer)
-			if err != nil && !errors.Is(err, io.ErrUnexpectedEOF) {
-				return img, err
+			if err != nil && !errors.Is(err, io.ErrUnexpectedEOF) && !errors.Is(err, io.EOF) {
+				return img, fmt.Errorf("failed to read file(%s): %w", name, err)
 			}
 
-			// Only try reading a TAR if file is "big enough"
-			if n == cap(buffer) {
+			// Not a TAR (or smaller than our buffer), might be a JSON file
+			decoder := json.NewDecoder(bytes.NewReader(buffer[:n]))
+			token, err := decoder.Token()
+			if _, ok := token.(json.Delim); err == nil && ok {
+				// Looks like a JSON object (or array)
+				fileBuffer, err := io.ReadAll(io.MultiReader(bytes.NewReader(buffer[:n]), tarReader))
+				if err != nil {
+					return img, fmt.Errorf("failed to read all json file(%s): %w", name, err)
+				}
+				jsonFiles[name] = fileBuffer
+			} else {
 				var unwrappedReader io.Reader
 				unwrappedReader, err = gzip.NewReader(io.MultiReader(bytes.NewReader(buffer[:n]), tarReader))
 				if err != nil {
@@ -101,18 +114,6 @@ func NewImageArchive(tarFile io.Reader) (*ImageArchive, error) {
 					img.LayerMap[tree.LayerName] = tree
 					continue
 				}
-			}
-
-			// Not a TAR (or smaller than our buffer), might be a JSON file
-			decoder := json.NewDecoder(bytes.NewReader(buffer[:n]))
-			token, err := decoder.Token()
-			if _, ok := token.(json.Delim); err == nil && ok {
-				// Looks like a JSON object (or array)
-				fileBuffer, err := io.ReadAll(io.MultiReader(bytes.NewReader(buffer[:n]), tarReader))
-				if err != nil {
-					return img, err
-				}
-				jsonFiles[name] = fileBuffer
 			}
 			// Ignore every other unknown file type
 		}
@@ -150,7 +151,10 @@ func (img *ImageArchive) GetFileTreeByLayerIndex(index int) (*filetree.FileTree,
 	}
 
 	layerName := img.Manifest.LayerTarPaths[index]
-	fileTree := img.LayerMap[layerName]
+	fileTree, ok := img.LayerMap[layerName]
+	if !ok {
+		return nil, fmt.Errorf("layer %s is not found", layerName)
+	}
 
 	return fileTree, nil
 }
@@ -159,7 +163,12 @@ func (img *ImageArchive) GetFileTreeByLayerIndex(index int) (*filetree.FileTree,
 // If the path doesn't exist in all layers, it returns nil.
 func (img *ImageArchive) GetLatestFileNode(path string) *filetree.FileNode {
 	for i := len(img.Manifest.LayerTarPaths) - 1; i >= 0; i-- {
-		fileTree, _ := img.GetFileTreeByLayerIndex(i)
+		fileTree, err := img.GetFileTreeByLayerIndex(i)
+		if err != nil {
+			fmt.Printf("failed to get file tree: %v\n", err)
+			continue
+		}
+
 		fileNode := fileTree.FindNodeFromPath(path)
 		if fileNode != nil {
 			return fileNode
