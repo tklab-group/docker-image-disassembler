@@ -90,7 +90,7 @@ func embodyCopiedObjects(targetPath string, copiedObjects []*restorecopy.CopiedO
 
 	for _, copiedObject := range copiedObjects {
 		pathForLayer := filepath.Join(targetPath, copiedObject.LayerID)
-		err := os.Mkdir(pathForLayer, 0777)
+		err := os.MkdirAll(pathForLayer, 0777)
 		if err != nil {
 			return fmt.Errorf("failed to create a directory: %w", err)
 		}

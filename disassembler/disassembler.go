@@ -4,10 +4,11 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"os"
+
 	"github.com/tklab-group/docker-image-disassembler/disassembler/image"
 	"github.com/tklab-group/docker-image-disassembler/disassembler/image/docker"
 	"github.com/tklab-group/docker-image-disassembler/disassembler/pkginfo"
-	"os"
 )
 
 // TODO: Enhance to other package managers
@@ -24,8 +25,15 @@ func GetAptPkgInfoInImageFromImageID(imageID string) (map[string]string, error) 
 	defer os.Remove(imageTarFile.Name())
 
 	err = docker.RunDockerCmd("save", []string{imageID, "-o", imageTarFile.Name()}, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to save image: %w", err)
+	}
 
 	imageTarFile, err = os.Open(imageTarFile.Name())
+	if err != nil {
+		return nil, fmt.Errorf("failed to open temp file: %w", err)
+	}
+
 	reader := bufio.NewReader(imageTarFile)
 
 	imageArchive, err := image.NewImageArchive(reader)
